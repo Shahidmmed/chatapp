@@ -17,26 +17,35 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { googleSignIn, emailSignIn, user } = UserAuth();
 
-  const signIn = (e) => {
+  const signIn = async (e) => {
     e.preventDefault();
-  };
 
-  const { googleSignIn, user } = UserAuth();
-
-  const handleGoogleSignIn = async () => {
     try {
-      await googleSignIn();
+      await emailSignIn(email, password);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    try {
+      await googleSignIn();
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (user != null) {
+      console.log("here", user);
       navigate("/chat");
     }
-  }, []);
+  }, [user]);
 
   return (
     <div className="flex flex-col h-screen items-center justify-center bg-blue-900 px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -85,6 +94,7 @@ const Login = () => {
               type="submit"
               className={style.signInButton}
               onClick={signIn}
+              disabled={loading}
             >
               Sign in
             </button>
