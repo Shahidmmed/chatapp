@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { UserAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 const style = {
   nav: `dark:bg-gray-800 h-20 flex justify-between items-center p-4`,
