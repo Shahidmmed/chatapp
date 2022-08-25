@@ -2,6 +2,7 @@ import { useContext, createContext, useState, useEffect } from "react";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signInWithRedirect,
   onAuthStateChanged,
   signOut,
@@ -19,7 +20,11 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const emailSignIn = (email, password) => {
-    createUserWithEmailAndPassword(auth, email, password);
+    createUserWithEmailAndPassword(auth, email, password).catch((error) => {
+      if (error.code == "auth/email-already-in-use") {
+        signInWithEmailAndPassword(auth, email, password);
+      }
+    });
   };
 
   const logOut = () => {
@@ -29,7 +34,6 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      console.log("User", currentUser);
     });
     return () => {
       unsubscribe();

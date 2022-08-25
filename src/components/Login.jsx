@@ -42,7 +42,6 @@ const Login = () => {
 
   useEffect(() => {
     if (user != null) {
-      console.log("here", user);
       navigate("/chat");
     }
   }, [user]);
